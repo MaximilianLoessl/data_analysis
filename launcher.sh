@@ -3,6 +3,8 @@
 # this file is just in case for launching from terminal
 # at first just put the files into the files dir
 
+# NOT NESCESSARY, DELETE LATER
+
 usage() {
 cat << EOF
 Usage: compute_metrics [-h] HEALTHY_DIR PAT_DIR OUTPUT_DIR [-r] [-j]

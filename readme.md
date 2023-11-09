@@ -1,4 +1,6 @@
-this is written in <b>markdown</b>
+## README
+
+consider the [readme from jupyter](readme.ipynb) for description.
 
 
 

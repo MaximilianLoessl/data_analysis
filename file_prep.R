@@ -8,7 +8,11 @@
 # add flag with option to run all of the analysis files --> source("/path/to/file") in the end
 # the question is, if I source multiple files from this file, do they run in parallel?
 # option to put multiple frames for HC / PT that get bind by row?
-# option keep rows --> Structure gets done, but the frame doesn't get reduced to the core with age, is importand, so that one can keep potential variables--> could just append it to the core
+# write in description that possibility to decide which files should run by zb changing code 
+# write in desc that possible to change things down in the code to for example include other var in different analysis. zb bei comparisons oder scn nicht nur Unterscheidung HC PT sondern noch
+# Möglichkeit group Unterscheidung zu machen --> wegen Möglichkeit keeper in file prep
+# write desc dass entweder age providen oder names df sex_age sein sollten 
+
 
 # CONTROL:
 # control if age is there and correct 
@@ -19,6 +23,8 @@
 # - the age point is a large danger point. 1. if someone uses another name for the age column than AGE, age, Age, it wont be recognized and be computed again. needs to be commented out manually.
 # 2. the age computing happens with grep from the subject names. so if the age is not in the subject names (f_45_), it wont work--> so I need to add that if it fails, it continues with the warning that
 # age has not been added and either continue without age or add it manually
+# file reader: if multiple files are in a folder, you would need to specify the 
+# keep rows --> needs to be written right
 
 
 ### Packages: #################################################################################
@@ -62,7 +68,7 @@ getCurrentFileLocation <-  function()
 
 #install.packages("optparse")
 # working directory, is only the same like file dir if cd there
-cur_dir <- getwd()
+w_dir <- getwd()
 # file dir, where file is saved
 file_dir <- getCurrentFileLocation()
 
@@ -75,6 +81,7 @@ option_list = list(
   make_option(c("-o", "--out"), type = "character", default = paste0(file_dir, "/files"), help = "output file name [default \"%default\"]", metavar = "character"),
   make_option(c("-g", "--group"), type = "character", default = NULL, help = "add a grouping variable for both dataframes. In case you want to import multiple couples of HC/Pat. \n    NOT POSSIBLE YET!!", metavar = "character"),
   make_option(c("-f", "--full"), action = "store_true", default = FALSE, help = "Full analysis"),
+  make_option(c("-k", "--keep"),type = "character", default = NULL, help = "Columnname you want to keep"),
   make_option(c("-j", "--joke"), type = "character", default = NULL, help = "build-in jokes", metavar = "character")
 )
 # get the arguments from the list of arguments
@@ -99,14 +106,16 @@ if (!is.null(opt$joke)){
 HC_DIR <- opt$healthy
 PT_DIR <- opt$patient
 OUT_DIR <- opt$out
+keeper <- opt$keep
 
 
 # import roi
 region <- read.csv(file = paste0(file_dir, "/region.csv"))
 region <- region[, 1][grepl("lh_|rh_", region[, 1])]
 core <- region %>% append("Subject", after = 0) # this is the core structure of the df
-
-
+core <- core %>% append(keeper) # Idea to just append the colname we want to keep
+# print("core: ")
+# print(core)
 # grep for age is a lookbehind for match f_ or m_, but doesn't include it in the final match , the d for one or more digits.
 # can be changed, If another grepling is needed
 age_pattern <- "(?<=f_|m_)\\d+"
@@ -175,7 +184,15 @@ file_reader <- function(DIR){
 
 get_age <- function(df){
   if (any(c("age", "AGE", "Age") %in% names(df))){ # check if age col exists
-    return(df)
+    if ("AGE" %in% names(df)){
+      names(df)[names(df)=="AGE"] <- "age"
+    } else if ("Age" %in% names(df)){
+      names(df)[names(df)=="Age"] <- "age"
+    } else {
+      print("age already in the dataframe")
+      return(df)
+    }
+    
   } else {
     df$age <- as.numeric(str_extract(df$Subject, age_pattern)) # if age does not exist, grep the age in the subjects with defined pattern
     return(df)
@@ -186,8 +203,10 @@ get_age <- function(df){
 subjecting <- function(df){
   if (!typeof(df[, 1]) == "numeric") { # like this first col only gets Subject if not numeric.
     names(df)[1] <- "Subject"
+    
     # change the names of the df to only the region
-    names(df) <- str_replace(names(df), paste0(".*(", paste(region, collapse = "|"), ").*"), "\\1") # this was painful to get, but works no matter the size of the df, string or whatever
+    names(df) <- str_replace(names(df), paste0(".*(", paste(core, collapse = "|"), ").*"), "\\1") # this was painful to get, but works no matter the size of the df, string or whatever, here changed region to core
+    
     return(get_age(df[names(df) %in% core])) # subset df to core and get age
   } else {
     message(sprintf("The first col is expected to be subjects, but is %s", names(df)[1]))
@@ -228,10 +247,28 @@ write.csv(x = patient_frame, file = paste0(OUT_DIR, "/patient_frame.csv"), row.n
 if(opt$full == TRUE){
   print("full analysis")
   # struct cov networks file gets launched with default parameters
-  system(command = paste0("Rscript --vanilla ", file_dir, "/scn.R"), wait = FALSE)
+  system(command = paste0("Rscript --vanilla ", file_dir, "/comparisons.R"), wait = TRUE)
+  system(command = paste0("Rscript --vanilla ", file_dir, "/scn.R"), wait = TRUE)
 } else {
   print("only read files")
 }
 
-print("can do different things after this")
 
+
+# test <- HCDL_labeled
+# colnames(test)[colnames(test)=="Subject"] <- "subidub"
+# 
+# if ("Subject" %in% names(test)){
+#   print("exists")
+# } else {
+#   print("does not exist")
+# }
+# 
+# View(roi)
+# difcol <- colnames(test)[!colnames(test) %in% roi]
+# 
+
+# 
+# a <- c("a", "b", "c", "d")
+# b <- c("a", "b", "c")
+# a[!a %in% b]

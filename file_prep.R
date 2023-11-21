@@ -12,6 +12,9 @@
 # write in desc that possible to change things down in the code to for example include other var in different analysis. zb bei comparisons oder scn nicht nur Unterscheidung HC PT sondern noch
 # Möglichkeit group Unterscheidung zu machen --> wegen Möglichkeit keeper in file prep
 # write desc dass entweder age providen oder names df sex_age sein sollten 
+# write in desc dass eig nichts hardcoded sein sollte, wenn mit file prep durch laufen, aber wenn einzelne Files, kann es zu schwierigkeiten kommen, zb mit durchlaufen lassen comparisons --> Subject Variable hardcoded
+# in desc erklären wie mit keep funktioniert für die comparisons
+# bonferroni corr for the comparisons?
 
 
 # CONTROL:

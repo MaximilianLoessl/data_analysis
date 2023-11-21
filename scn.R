@@ -6,6 +6,7 @@
 
 # to tos:
 # comment exactly and option to run directly without terminal
+# add the possibility, that there is another variable than group inside. if that is the case, the plots should look different. 
 
 # Description
 # this file runs a healthy and a patients frame and compares them regarding one measure of the graph theroy. (default is global efficiency)
@@ -50,7 +51,7 @@ getCurrentFileLocation <-  function()
 }
 
 # working directory, is only the same like file dir if cd there
-cur_dir <- getwd()
+w_dir <- getwd()
 # file dir, where file is saved
 file_dir <- getCurrentFileLocation()
 
@@ -97,7 +98,7 @@ current_measure <- dQuote(measure)
 
 set.seed(42)
 
-N_SAMPLE_NUM <- 1000
+N_SAMPLE_NUM <- 10
 
 thresholds <- seq(0, 1, 0.01)
 
@@ -242,10 +243,10 @@ lims <- c(min(df_scn_all[df_scn_all$thresholds == 0.50, ]$result_lo)*0.98, max(d
 
 # fist plot for the fun global efficiency, Threshold
 p1 <- ggplot(df_scn_all, aes(x=thresholds, y=result, ymin=result_lo, ymax=result_hi, group=DIAG))+ #could take interaction out, bc model = diag
-  geom_line(aes(color= group, linetype = group), size=0.5)+ # linetype not really important
-  geom_errorbar(aes(color=group, linetype=DIAG), alpha=0.5, size=0.5)+
+  geom_line(aes(color= group, linetype = group), linewidth=0.5)+ # linetype not really important
+  geom_errorbar(aes(color=group, linetype=DIAG), alpha=0.5, linewidth=0.5)+
   # dashed line at .5
-  geom_vline(xintercept = 0.5, linetype='dashed', size=0.3, alpha=0.6)+
+  geom_vline(xintercept = 0.5, linetype='dashed', linewidth=0.3, alpha=0.6)+
   # get the little bar to see where the second plot is from
   annotate('rect', fill = 'lightblue', alpha = 0.5, xmin=0.49, xmax=0.51, ymin=lims[1], ymax=lims[2])+  # annotate great for putting in stuff
   theme(aspect.ratio=1, legend.position = c(0.15, 0.25))+scale_alpha(guide = 'none')+
@@ -261,20 +262,12 @@ p2 <- ggplot(df_scn_all[df_scn_all$thresholds == 0.50, ], aes(y=result, ymin=res
   geom_errorbar(aes(linetype=DIAG))+
   facet_wrap(~DIAG, scales='free_x')+
   ylim(lims)+
-  ylab('Global Efficiency (at 0.5)')+xlab('')+theme(legend.position = 'none', panel.background = element_rect(fill = 'lightblue'))
+  ylab(paste0(current_measure, "at 0.5 Threshold"))+xlab('')+theme(legend.position = 'none', panel.background = element_rect(fill = 'lightblue'))
 p2
-
 # put plots together
 ggarrange(plotlist=list(p1, p2), widths = c(2, 1), nrow=1, ncol=2)
 # # save them in the outdir
 ggsave(filename = paste(OUT_DIR, "/", current_measure, '.pdf', sep=''), width=10, height = 6)
-
-
-
-
-
-
-
 
 
 

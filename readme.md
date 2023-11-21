@@ -1,8 +1,6 @@
 # Project Brain-Area analysis
 
-test again
-
-reads a dataframe and produce some kind of output
+File preparation and basic analysis
 
 ## Reading
 Launch the file [file_prep.R](file_prep.R) in the Terminal:

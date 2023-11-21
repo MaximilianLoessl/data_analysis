@@ -98,7 +98,7 @@ current_measure <- dQuote(measure)
 
 set.seed(42)
 
-N_SAMPLE_NUM <- 10
+N_SAMPLE_NUM <- 1000
 
 thresholds <- seq(0, 1, 0.01)
 
@@ -108,7 +108,7 @@ roi <- region
 core <- region %>% append("Subject", after = 0) # this is the core structure of the df
 
 
-if (!all.equal(names(healthy_frame), names(patient_frame))){
+if (!identical(names(healthy_frame), names(patient_frame))){
   stop("Provide dataframes with matching columns")
 } else {
   print("Checking if columnnames match")

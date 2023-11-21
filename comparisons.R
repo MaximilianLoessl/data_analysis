@@ -1,5 +1,5 @@
 # this file is for group comparisons. 
-# test
+
 # should contain:
 # thickness boxplots, but not only thickness --> adjustable?
 # thickness brain comparisons with ggseg

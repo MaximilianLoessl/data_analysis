@@ -46,3 +46,20 @@ The dataframes should be saved as healthy_frame.csv and patient_frame.csv and lo
 This is the format of the [file_prep.R](file_prep.R) standard-output. It may look different, when the [region](region.csv) gets changed
 
 
+
+## Problems
+
+- Sometimes, you have to manually install the packages with <code>install.packages("packagename")</code>. This can cause the file to stop even before the help option. In that case do this:
+
+<code>install.packages("tidyverse")
+install.packages("optparse")
+library(tidyverse)
+library(optparse)</code>
+
+
+
+## What is still missing?
+
+1. The opportunity to read multiple separate subjects from a folder
+
+2. A special analysis for the BIDS format

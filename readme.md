@@ -52,9 +52,9 @@ For example:
 
 <code>Patient_007_m_45_something</code>
 
-This is important to get the age column.
+This is important to get the age column if the age isn't already in the dataframe in the form of "age", "Age" or "AGE"
 
-Based on the input as HC or PT, the <i>group column</i> gets computed.
+Based on the input as HC or PT, the <i>group column</i> gets computed and filled with either <i>hc</i> or <i>pt</i> 
 
 The columns of dataframes get limited to one atlas and the names of the columns are shortened to the atlas names based on the respective match. The Atlas can be found and modified in the <b>[region.csv](region.csv)</b> file. 
 
@@ -75,6 +75,11 @@ The dataframes should be saved as healthy_frame.csv and patient_frame.csv and lo
 | Patient_008_f_33_else       | 2.25         | 3.12          |  ...  |  33  |
 
 This is the format of the [file_prep.R](file_prep.R) standard-output. It may look different, when the [region](region.csv) gets changed
+
+if the `-f` flag is added in the command line, the files [scn.R](scn.R) and [comparisons.R](comparisons.R) get launched. If the `-f` flag is not added, the dataframes only get read into the files folder.
+
+
+# Structural covariance networks
 
 
 

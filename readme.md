@@ -51,11 +51,12 @@ This is the format of the [file_prep.R](file_prep.R) standard-output. It may loo
 
 - Sometimes, you have to manually install the packages with <code>install.packages("packagename")</code>. This can cause the file to stop even before the help option. In that case do this:
 
-<code>install.packages("tidyverse")
+```R
+install.packages("tidyverse")
 install.packages("optparse")
 library(tidyverse)
-library(optparse)</code>
-
+library(optparse)
+```
 
 
 ## What is still missing?

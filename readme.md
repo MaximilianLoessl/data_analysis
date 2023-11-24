@@ -11,6 +11,37 @@ Get help with the -h flag:
 
 <code>Rscript --vanilla /home/user/PD_analysis/file_prep.R -h</code>
 
+```
+Options:
+        -y CHARACTER, --healthy=CHARACTER
+                Give the path tho the healthy controls.
+     Should be a dataframe containing all the subjects.  [example: /path/to/HC]
+
+        -p CHARACTER, --patient=CHARACTER
+                Give the path tho the patients.
+     Should be a dataframe containing all the subjects.  [example: /path/to/PT]
+
+        -o CHARACTER, --out=CHARACTER
+                output file name [default "/mnt/c/Users/maxil/Documents/data_analysis/files"]
+
+        -g CHARACTER, --group=CHARACTER
+                add a grouping variable for both dataframes. In case you want to import multiple couples of HC/Pat.
+    NOT POSSIBLE YET!!
+
+        -f, --full
+                Full analysis
+
+        -k KEEP, --keep=KEEP
+                Columnname you want to keep
+
+        -j CHARACTER, --joke=CHARACTER
+                build-in jokes
+
+        -h, --help
+                Show this help message and exit
+
+```
+
 The files of the <i>Health Controls HC</i> and the <i>Patients (PT)</i> should be in seperate folders. It is also possible to directly provide the path to the file. Furthermore, 2 files, containing for example the left and right hemisphere, can be used as input. They will be put together. If the input file consists only one hemisphere, it gets processed nevertheless
 
 The file should come in the form of .txt or .csv. The first row should be the names of the Subjects, containing this somewhere in the string:
@@ -57,7 +88,7 @@ install.packages("optparse")
 library(tidyverse)
 library(optparse)
 ```
-
+    After succesfully running these commands you should be able to get the help option.
 
 ## What is still missing?
 

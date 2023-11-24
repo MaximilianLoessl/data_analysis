@@ -1,15 +1,21 @@
 # Project Brain-Area analysis
 
-File preparation and basic analysis
+This project is about data preparation and some kinds of analysis mainly for morphometrical dataframes. In the first part, the given dataframes get read and organized for the further analysis. Secondly, structural covariance networks get calculated. Finally, The Brain 
 
-## Reading
-Launch the file [file_prep.R](file_prep.R) in the Terminal:
+Download this Repository or clone it with:
+```
+git clone https://github.com/MaximilianLoessl/data_analysis.git
+```
+
+# File preparation
+Launch the file [file_prep.R](file_prep.R) in the Terminal:         (basic just read option)
 
 <code>Rscript --vanilla /path/to/Rscript/file_prep.R -y /path/to/health_controls -p /path/to/patients</code>
 
 Get help with the -h flag:
-
-<code>Rscript --vanilla /home/user/PD_analysis/file_prep.R -h</code>
+```
+Rscript --vanilla /home/user/PD_analysis/file_prep.R -h
+```
 
 ```
 Options:
@@ -52,13 +58,28 @@ For example:
 
 <code>Patient_007_m_45_something</code>
 
-This is important to get the age column if the age isn't already in the dataframe in the form of "age", "Age" or "AGE"
+This is important to get the age column if the age isn't already contained in the dataframe in the form of "age", "Age" or "AGE"
 
-Based on the input as HC or PT, the <i>group column</i> gets computed and filled with either <i>hc</i> or <i>pt</i> 
+Based on the input as HC or PT, the <i>group</i> column gets computed and filled with either <i>hc</i> or <i>pt</i> 
 
-The columns of dataframes get limited to one atlas and the names of the columns are shortened to the atlas names based on the respective match. The Atlas can be found and modified in the <b>[region.csv](region.csv)</b> file. 
+The structure of the file depends on the given Atlas. The Atlas can be found and modified in the <b>[region.csv](region.csv)</b> file. As default, it contains the <b>Desikan-Killiany Atlas</b> (can be changed)
 
-The modified Dataframes will get stored in the <b>files</b> directory, which is the default output directory
+The modified Dataframes will get stored in the <b>files</b> directory, which is the default output directory. For the structure of the output, see below. 
+
+### Output directory
+As default, the output directory will be the files folder. 
+
+### Group variable
+It is possible to add a grouping variable with the `-g` flag. This option is given to keep the overview of the analysis of multiple groups.
+
+### Full analysis
+If the `-f` flag is added in the command line, the files [scn.R](scn.R) and [comparisons.R](comparisons.R) get launched. If the `-f` flag is not added, the dataframes only get read into the files folder.
+
+### Keep a column
+In the case you don't want to loose a column, because the dataframe gets reduced by the Atlas, you can add the `-k` flag to keep a certain column.
+
+### Build-in jokes
+Just because I've never seen a flag like this. Run it with the `-j` flag
 
 ---
 
@@ -79,7 +100,7 @@ This is the format of the [file_prep.R](file_prep.R) standard-output. It may loo
 if the `-f` flag is added in the command line, the files [scn.R](scn.R) and [comparisons.R](comparisons.R) get launched. If the `-f` flag is not added, the dataframes only get read into the files folder.
 
 
-# Structural covariance networks
+## Structural covariance networks
 
 
 
@@ -100,3 +121,7 @@ library(optparse)
 1. The opportunity to read multiple separate subjects from a folder
 
 2. A special analysis for the BIDS format
+
+3. The plotting of the comparisons is still only set for the Desikan-Killiany Atlas. Should be adapted to automatically chose the atlas based on the input atlas
+
+4. The grouping variable should be implemented better. Mainly in the names of the output plots. And does it even work??

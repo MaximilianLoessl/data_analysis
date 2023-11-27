@@ -134,7 +134,8 @@ install.packages("optparse")
 library(tidyverse)
 library(optparse)
 ```
-    After succesfully running these commands you should be able to get the help option.
+    
+After succesfully running these commands you should be able to get the help option.
 
 ## What is still missing?
 
@@ -142,7 +143,7 @@ library(optparse)
 
 2. A special analysis for the BIDS format
 
-3. The plotting of the comparisons is still only set for the Desikan-Killiany Atlas. Should be adapted to automatically chose the atlas based on the input atlas
+3. The plotting of the comparisons is only set for the Desikan-Killiany and Aseg Atlas. Would need adaption with ggsegExtra
 
 4. The grouping variable should be implemented better. Mainly in the names of the output plots. And does it even work??
 

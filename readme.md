@@ -1,6 +1,6 @@
 # Project Brain-Area analysis
 
-This project is about data preparation and some kinds of analysis mainly for morphometrical dataframes. In the first part, the given dataframes get read and organized for the further analysis. Secondly, structural covariance networks get calculated. Finally, The Brain measurements get compared between the <i>healthy controls</i> and the <i>patients</i>.
+This project is about data preparation and some kind of analysis mainly for morphometrical dataframes. In the first part, the given dataframes get read and organized for the further analysis. Secondly, structural covariance networks get calculated. Finally, The Brain measurements are compared between the <i>healthy controls</i> and the <i>patients</i>.
 
 Download this Repository or clone it with:
 ```
@@ -77,7 +77,7 @@ It is possible to add a grouping variable with the `-g` flag. This option is giv
 If the `-f` flag is added in the command line, the files [scn.R](scn.R) and [comparisons.R](comparisons.R) get launched. If the `-f` flag is not added, the dataframes only get read into the files folder.
 
 ### Keep a column
-In the case you don't want to loose a column, because the dataframe gets reduced by the Atlas, you can add the `-k` flag to keep a certain column.
+In the case you don't want to lose a column because the dataframe gets reduced by the Atlas, you can add the `-k` flag to keep a certain column. It will be used as a grouping column so the values should not vary between the dataframes. It is useful if you want to analyze multiple dataframes and compare the results. 
 
 ### Build-in jokes
 Just because I've never seen a flag like this. Run it with the `-j` flag
@@ -87,7 +87,7 @@ Just because I've never seen a flag like this. Run it with the `-j` flag
 
 # Analysis
 
-The files for further analysis are taken from the files folder, where they were saved either by preprocessing using [file_prep.R](file_prep.R), or manually.
+The dataframes for further analysis are taken from the files folder, where they were saved either by preprocessing using [file_prep.R](file_prep.R), or manually.
 
 The dataframes should be saved as healthy_frame.csv and patient_frame.csv and look like this:
 
@@ -124,6 +124,9 @@ Rscript --vanilla /path/to/Rscript/scn.R -h
 ## Comparisons
 The [comparisons.R file](comparisons.R) compares the healthy frame with the patients frame by fitting region wise a linear model on the healthy controls frame, applying the model to the patients frame and calculating the d-values by comparing the region wise mean of the residuals. Afterwards the resulting d-values get plotted on a brain to see the diverging regions between the healthy controls and the patients.
 
+### Kept columns
+If the `-k` Flag is included in the command to read the files, it is seen as grouping variable. Therefore it should be unique and should not vary between the dataframes. 
+
 ## Problems
 
 - Sometimes, you have to manually install the packages with <code>install.packages("packagename")</code>. This can cause the file to stop even before the help option. In that case do this:
@@ -137,13 +140,15 @@ library(optparse)
     
 After succesfully running these commands you should be able to get the help option.
 
+- The R-files run independent from each other, so you can't just use the variables from the first script
+
 ## What is still missing?
 
 1. The opportunity to read multiple separate subjects from a folder
 
 2. A special analysis for the BIDS format
 
-3. The plotting of the comparisons is only set for the Desikan-Killiany and Aseg Atlas. Would need adaption with ggsegExtra
+3. The plotting of the comparisons is only set for the Desikan-Killiany and Aseg Atlas. Would need adaption with ggsegExtra. But it's no Cran package
 
 4. The grouping variable should be implemented better. Mainly in the names of the output plots. And does it even work??
 

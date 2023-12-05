@@ -74,6 +74,30 @@ region <- region[, 1][grepl("lh_|rh_", region[, 1])]
 roi <- region
 core <- region %>% append("Subject", after = 0) # this is the core structure of the df
 core <- core %>% append(c("age", "group")) # to check if there is another column as grouping variable
+
+# if (any(region %in% dk$data$label)) {
+#   print("Desikan-Killiany atlas")
+# } else if (any(region %in% aseg$data$label)) {
+#   print("Subcortical atlas aseg")
+# } else {
+#   print("Atlas unknown, segmentation not possible")
+# }
+
+# this is possibly more sensitive bc it greps for the region. The question is if we want it to be sensitive bc
+# we would want an exact match. 
+if (any(sapply(dk$data$region, function(x) grepl(x, region)))){
+  print("Desikan-Killiany atlas")
+  atlas <- dk
+} else if (any(sapply(aseg$data$region, function(x) grepl(x, region)))){
+  print("Subcortical atlas aseg")
+  atlas <- aseg
+} else {
+  print("Atlas unknown, segmentation not possible")
+}
+
+
+
+
 # patient_frame$MODEL <- "DL"
 # healthy_frame$MODEL <- "test2"
 # print(names(healthy_frame))
@@ -105,6 +129,7 @@ if (!identical(names(healthy_frame %>% select(sort(names(.)))), names(patient_fr
 # now we check if the Column names match the core. If not, extra column got computed.
 
 if (identical(names(healthy_frame), core)) {
+print("frames match the core structure")
     calc_dvalues <- function(healthy_frame, patient_frame, prep_ggseg=FALSE){ # prep ggseg only if the prep for ggseg is needed, otherways just return age corrected value
     # fun get the residuals --> would have been better with apply than  for loop
     #
@@ -132,7 +157,8 @@ if (identical(names(healthy_frame), core)) {
       pd_pred <- predict(model, newdata = df.pt)
       # need to unlist bc can't convert list to numeric
       pd_resids <- unlist(df.pt[reg]) - pd_pred
-      d_value <- effectsize::cohens_d(x = hc_resids, y = pd_resids)
+      # d_value <- effectsize::cohens_d(x = hc_resids, y = pd_resids)
+d_value <- effectsize::cohens_d(x = pd_resids, y = hc_resids)
       # create matrix with current region and dvalue to bind together
       prep <- matrix(data = c(reg, d_value$Cohens_d), ncol = 2, dimnames = list(c(), c("region", "d_value")))
       results <- rbind(results, prep)
@@ -146,14 +172,14 @@ if (identical(names(healthy_frame), core)) {
   
   
   plot_ggseg <- function(df){
-    seg <- ggseg(df, atlas = dk,
+    seg <- ggseg(df, atlas = atlas,
                  colour = "white",
                  size = .1,
                  position = "stacked",
                  mapping = aes(fill = p)) +
       theme_void() +
       ggtitle(paste0("Thickness-Segmentation for d-Values for the Residuals of Healthy Controls vs Patients")) +
-      scale_fill_gradient2(low = "red", mid = "white", high = "blue", limits= c(-1, 1))
+      scale_fill_gradient2(low = "blue", mid = "white", high = "red", limits= c(-1, 1))
     # ggsave(filename = paste0(OUT_DIR, ".pdf", plot = seg))
     return(seg)
   }
@@ -161,6 +187,7 @@ if (identical(names(healthy_frame), core)) {
   print(filename)
 } else {
   # else for the case that the frames are NOT identical with the core --> if --keep in file prep
+print("frames don't match the core structure")
   print("columns you wanted to keep: ")
   diff_cols <- colnames(healthy_frame)[!colnames(healthy_frame) %in% core]
   print(unique(healthy_frame[diff_cols]))
@@ -200,7 +227,8 @@ if (identical(names(healthy_frame), core)) {
         pd_pred <- predict(model, newdata = df.pt)
         # need to unlist bc can't convert list to numeric
         pd_resids <- unlist(df.pt[reg]) - pd_pred
-        d_value <- effectsize::cohens_d(x = hc_resids, y = pd_resids)
+        # d_value <- effectsize::cohens_d(x = hc_resids, y = pd_resids)
+d_value <- effectsize::cohens_d(x = pd_resids, y = hc_resids)
         # create matrix with current region and dvalue to bind together
         prep <- matrix(data = c(reg, d_value$Cohens_d), ncol = 2, dimnames = list(c(), c("region", "d_value")))
         results <- rbind(results, prep)
@@ -214,7 +242,7 @@ if (identical(names(healthy_frame), core)) {
     
     
     plot_ggseg <- function(df){
-      seg <- ggseg(df, atlas = dk,
+      seg <- ggseg(df, atlas = atlas,
                    colour = "white",
                    size = .1,
                    position = "stacked",
@@ -225,7 +253,7 @@ if (identical(names(healthy_frame), core)) {
       # ggsave(filename = paste0(OUT_DIR, ".pdf", plot = seg))
       return(seg)
     }
-    filename = paste0(PLOT_DIR, "/", unique(healthy_frame[diff_cols]),"plot.jpeg")
+    filename = paste0(PLOT_DIR, "/", unique(healthy_frame[diff_cols]),"_plot.jpeg")
     print(filename)
     } else {
       print(paste0("Too many levels in a grouping var. There is the Group-Variable for HC/PT and the ", unique(diff_cols), "-Variable with ", unique(healthy_frame[diff_cols]), "/", unique(patient_frame[diff_cols])))
@@ -237,7 +265,10 @@ if (identical(names(healthy_frame), core)) {
 }
 
 # hier montag weiter machen, unterer Teil erst nur rein kopiert der funktion die unterscheidet zwischen mit oder ohne zusatzcols --> müsste einfacheren weg geben als for loop für die untersch variablen
-
+# plot <- plot_ggseg(df = calc_dvalues(healthy_frame = healthy_frame, patient_frame = patient_frame, prep_ggseg=TRUE))
+# plot
+# 
+# calc_dvalues(healthy_frame = healthy_frame, patient_frame = patient_frame, prep_ggseg=TRUE)
 
 # plot_ggseg(calc_dvalues(healthy_frame, patient_frame, prep_ggseg=TRUE))
 

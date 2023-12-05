@@ -4,18 +4,15 @@
 
 # to dos:
 # reader not only for dataframes, instead for multiple single subjects as well --> put them into dataframe 
-# check if bids structure --> special analysis --> could be done with reading the arguments, and if one argument is "bids" --> launch special analysis
-# add flag with option to run all of the analysis files --> source("/path/to/file") in the end
-# the question is, if I source multiple files from this file, do they run in parallel?
-# option to put multiple frames for HC / PT that get bind by row?
-# write in description that possibility to decide which files should run by zb changing code 
-# write in desc that possible to change things down in the code to for example include other var in different analysis. zb bei comparisons oder scn nicht nur Unterscheidung HC PT sondern noch
-# Möglichkeit group Unterscheidung zu machen --> wegen Möglichkeit keeper in file prep
+# Check if and why not file reader works with reading files from a directory
+
 # write desc dass entweder age providen oder names df sex_age sein sollten 
 # write in desc dass eig nichts hardcoded sein sollte, wenn mit file prep durch laufen, aber wenn einzelne Files, kann es zu schwierigkeiten kommen, zb mit durchlaufen lassen comparisons --> Subject Variable hardcoded
 # in desc erklären wie mit keep funktioniert für die comparisons
 # bonferroni corr for the comparisons?
-
+# überprüfen ob Ergebnisse stimmen, scn sah auf meinem Laptop vertauscht aus hc pt --> https://www.statology.org/cohens-d-in-r/ jetzt ist richtig rum mit Pat zuerst, dann gesunde. Wenn zuerst Gesunde
+# dann messe ich wie viel Dicker das Hirn der Gesunden ist. Anders rum wieviel Dicker das Hirn der PT ist
+# rein nehmen was ist core strukt
 
 # CONTROL:
 # control if age is there and correct 
@@ -37,6 +34,9 @@
 # library(dplyr)
 # library(stringr)
 
+if(.Platform$OS.type == "windows") {
+  print("you are using Windows. Check the paths and commands if an error occurs. Windows paths are with \ separators, not with /")
+}
 
 load_packages <- function(packages){
   lapply(packages, library, character.only = TRUE)
@@ -105,6 +105,8 @@ if (!is.null(opt$joke)){
   print("joke")
 }
 
+
+
 # directories and labeling
 HC_DIR <- opt$healthy
 PT_DIR <- opt$patient
@@ -112,10 +114,12 @@ OUT_DIR <- opt$out
 keeper <- opt$keep
 
 
+
 # import roi
 region <- read.csv(file = paste0(file_dir, "/region.csv"))
 region <- region[, 1][grepl("lh_|rh_", region[, 1])]
 core <- region %>% append("Subject", after = 0) # this is the core structure of the df
+core <- core %>% append(c("age", "Age", "AGE"))
 core <- core %>% append(keeper) # Idea to just append the colname we want to keep
 # print("core: ")
 # print(core)

@@ -79,7 +79,7 @@ If the `-f` flag is added in the command line, the files [scn.R](scn.R) and [com
 ### Keep a column
 In the case you don't want to lose a column because the dataframe gets reduced by the Atlas, you can add the `-k` flag to keep a certain column. It will be used as a grouping column so the values should not vary between the dataframes. It is useful if you want to analyze multiple dataframes and compare the results. 
 
-### Build-in jokes
+### Built-in jokes
 Just because I've never seen a flag like this. Run it with the `-j` flag
 
 ---

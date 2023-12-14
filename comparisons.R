@@ -158,7 +158,7 @@ print("frames match the core structure")
       # need to unlist bc can't convert list to numeric
       pd_resids <- unlist(df.pt[reg]) - pd_pred
       # d_value <- effectsize::cohens_d(x = hc_resids, y = pd_resids)
-d_value <- effectsize::cohens_d(x = pd_resids, y = hc_resids)
+      d_value <- effectsize::cohens_d(x = pd_resids, y = hc_resids) # otherways I get where hc are thicker
       # create matrix with current region and dvalue to bind together
       prep <- matrix(data = c(reg, d_value$Cohens_d), ncol = 2, dimnames = list(c(), c("region", "d_value")))
       results <- rbind(results, prep)
@@ -249,7 +249,7 @@ d_value <- effectsize::cohens_d(x = pd_resids, y = hc_resids)
                    mapping = aes(fill = p)) +
         theme_void() +
         ggtitle(paste0("Thickness-Segmentation for ", unique(healthy_frame[diff_cols]), " - d-Values for the Residuals of Healthy Controls vs Patients")) +
-        scale_fill_gradient2(low = "red", mid = "white", high = "blue", limits= c(-1, 1))
+        scale_fill_gradient2(low = "blue", mid = "white", high = "red", limits= c(-1, 1))
       # ggsave(filename = paste0(OUT_DIR, ".pdf", plot = seg))
       return(seg)
     }

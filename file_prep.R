@@ -2,20 +2,13 @@
 # you perhaps need to install the packages beforehand
 
 
-# to dos:
-# reader not only for dataframes, instead for multiple single subjects as well --> put them into dataframe 
-# Check if and why not file reader works with reading files from a directory
 
-# write desc dass entweder age providen oder names df sex_age sein sollten 
-# write in desc dass eig nichts hardcoded sein sollte, wenn mit file prep durch laufen, aber wenn einzelne Files, kann es zu schwierigkeiten kommen, zb mit durchlaufen lassen comparisons --> Subject Variable hardcoded
-# in desc erklären wie mit keep funktioniert für die comparisons
-# bonferroni corr for the comparisons?
 # überprüfen ob Ergebnisse stimmen, scn sah auf meinem Laptop vertauscht aus hc pt --> https://www.statology.org/cohens-d-in-r/ jetzt ist richtig rum mit Pat zuerst, dann gesunde. Wenn zuerst Gesunde
 # dann messe ich wie viel Dicker das Hirn der Gesunden ist. Anders rum wieviel Dicker das Hirn der PT ist
-# rein nehmen was ist core strukt
+
 
 # CONTROL:
-# control if age is there and correct 
+# control if age is there and correct
 
 # danger points:
 # - read the roi file, bc if not dataframe structure could read it wrong and then afterwards would break. as well, at the moment the file is with the "_thickness" ending. this we need to change

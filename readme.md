@@ -142,6 +142,8 @@ After succesfully running these commands you should be able to get the help opti
 
 - The R-files run independent from each other, so you can't just use the variables from the first script
 
+- If multiple files are in the input folder, the reader searches for "thickness" in the filename. If it is missing, the files don't get recognized.
+
 ## What is still missing?
 
 1. The opportunity to read multiple separate subjects from a folder
@@ -153,3 +155,5 @@ After succesfully running these commands you should be able to get the help opti
 4. The grouping variable should be implemented better. Mainly in the names of the output plots. And does it even work??
 
 5. Are the commands looking different in CMD?
+
+6. Jokes for the joke mode...
